@@ -1,0 +1,14 @@
+
+.DS_Store
+
+*.apk
+
+factorial/FactrorialAndroid/bin/classes.dex
+
+factorial/FactrorialAndroid/bin/jarlist.cache
+
+factorial/FactrorialAndroid/bin/resources.ap_
+
+factorial/FactrorialAndroid/gen/com/cpinera/Factorial/R.java
+
+*.clj~
