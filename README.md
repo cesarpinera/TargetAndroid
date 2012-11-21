@@ -33,22 +33,24 @@
 
 1. Create a Leiningen profile for each target in project.clj
 
-	; project.clj
-	(defproject factorial "0.1.0-SNAPSHOT"
-	  :description "A simple factorial library"
-	  :url "http://example.com/FIXME"
-	  :license {:name "Eclipse Public License"
-	            :url "http://www.eclipse.org/legal/epl-v10.html"}
-	  :source-paths ["src/common"]
-	  :java-source-paths ["src/java"]
-	  :profiles {:non-android {:dependencies [[org.clojure/clojure "1.4.0"]]
-	                     :source-paths ["src/non-android"]}
-	             :android {:dependencies [[android/clojure "1.4.0"]]
-	                       :source-paths ["src/android"]
-	                       :aot :all
-	                       :aot-exclude-ns ["clojure.parallel"]
-	                       :exclusions [[org.clojure/clojure]]}})
-	
+```clj
+; project.clj
+(defproject factorial "0.1.0-SNAPSHOT"
+  :description "A simple factorial library"
+  :url "http://example.com/FIXME"
+  :license {:name "Eclipse Public License"
+            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :source-paths ["src/common"]
+  :java-source-paths ["src/java"]
+  :profiles {:non-android {:dependencies [[org.clojure/clojure "1.4.0"]]
+                     :source-paths ["src/non-android"]}
+             :android {:dependencies [[android/clojure "1.4.0"]]
+                       :source-paths ["src/android"]
+                       :aot :all
+                       :aot-exclude-ns ["clojure.parallel"]
+                       :exclusions [[org.clojure/clojure]]}})
+```
+
 1. Run lein deps for each profile
 	- lein with-profile android deps
 	- lein with-profile non-android deps
@@ -58,23 +60,27 @@
 	- Try to stay away from futures
 	- Be kind to the stack
 
-	; src/common/factorial/factorial.clj
-	(ns factorial.factorial)
-	
-	(defn factorial [n]
-	  (reduce * (range 1 (inc n))))
+```clj	  
+; src/common/factorial/factorial.clj
+(ns factorial.factorial)
+
+(defn factorial [n]
+  (reduce * (range 1 (inc n))))`
+```
 
 1. [optional] Create a Java-friendly wrapper for Clojure code
 
-	;src/android/factorial/FactorialClient.clj
-	(ns factorial.FactorialClient
-	  (:use [factorial.factorial :only [factorial]])
-	  (:gen-class
-	   :methods [#^{:static true} [factorial [Long] Long]]))
-	
-	(defn -factorial
-	  [n]
+```clj
+;src/android/factorial/FactorialClient.clj
+(ns factorial.FactorialClient
+  (:use [factorial.factorial :only [factorial]])
+  (:gen-class
+   :methods [#^{:static true} [factorial [Long] Long]]))
+
+(defn -factorial
+  [n]
 	  (factorial n))
+```
   
 1. Try it in the REPL
 	- lein with-profile android ritz 
@@ -82,11 +88,13 @@
 	- jack-in won't work with a profile 
 	- ClassNotFoundException java.lang.ClassNotFoundException: clojure.lang.RT <- You didn't select a profile
 	
-	(require 'factorial.factorial)
-	(factorial.factorial/factorial 10)
-	
-	(require 'factorial.FactorialClient)
-	(factorial.FactorialClient/-factorial 10)
+```clj
+(require 'factorial.factorial)
+(factorial.factorial/factorial 10)
+
+(require 'factorial.FactorialClient)
+(factorial.FactorialClient/-factorial 10)
+```
 	
 1. Create your jar file
 	- lein with-profile android uberjar
